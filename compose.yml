@@ -1,0 +1,28 @@
+services:
+  redis:
+    image: redis:6.2.14
+    environment:
+      USER: redis-admin
+      PASS: admin-password
+    command: bash -c "/bin/bash /conf/redis.sh && while true; do echo "up"; sleep 100; done"
+    ports:
+      - 6379:6379
+      - 6380:6380
+      - 6381:6381
+      - 6382:6382
+      - 6383:6383
+      - 6384:6384
+    volumes:
+      - ./conf:/conf
+    networks:
+      redis_cluster_network:
+        ipv4_address: 172.16.239.10
+
+networks:
+  redis_cluster_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.239.0/24
+          gateway: 172.16.239.1
